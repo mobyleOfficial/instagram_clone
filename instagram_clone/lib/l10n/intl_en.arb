@@ -1,0 +1,14 @@
+{
+  "app_name": "Instagram Clone",
+  "default_empty_text_error_message": "Empty field",
+  "default_invalid_text_error_message": "Invalid field",
+  "sign_in_username_edit_text_hint": "Phone number, email or username",
+  "sign_in_password_edit_text_hint": "Password",
+  "sign_in_button_title": "Log in",
+  "sign_in_forgot_password_text": "Forgot yout login details? Get help logging in.",
+  "sign_in_forgot_password_spanned_text": "Get help logging in.",
+  "sign_in_or_text": "OR",
+  "sign_in_with_facebook_text": "Log in with Facebook",
+  "sign_in_create_account_text": "Don't have an account? Sign up.",
+  "sign_in_create_account_spanned_text": "Sign up."
+}
