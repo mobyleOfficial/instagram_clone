@@ -1,3 +1,3 @@
 abstract class AuthRepository {
-  Future<String> signIn(String username, String password);
+  Future<void> signIn(String username, String password);
 }

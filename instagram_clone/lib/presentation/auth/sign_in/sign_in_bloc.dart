@@ -1,5 +1,6 @@
 import 'package:domain/use_case/sign_in_uc.dart';
 import 'package:domain/use_case/validate_empty_text_uc.dart';
+import 'package:instagram_clone/presentation/auth/sign_in/sign_in_model.dart';
 import 'package:instagram_clone/presentation/common/input_status_vm.dart';
 import 'package:instagram_clone/presentation/common/subscription_holder.dart';
 import 'package:rxdart/rxdart.dart';
@@ -41,7 +42,7 @@ class SignInBloc with SubscriptionHolder {
         .flatMap(
           (_) => _signIn(),
         )
-        .listen((_) {})
+        .listen(_onSignInStateSubject.add)
         .addTo(subscriptions);
 
     // Enable/Disable button
@@ -66,6 +67,16 @@ class SignInBloc with SubscriptionHolder {
 
   final ValidateEmptyTextUC _validateEmptyTextUC;
   final SignInUC _signInUC;
+
+  // Sign in State
+  final _onSignInStateSubject = BehaviorSubject<SignInState>.seeded(Idle());
+
+  Stream<SignInState> get signInStateStream => _onSignInStateSubject.stream;
+
+  // Sign in Events
+  final _onSignInEventSubject = PublishSubject<SignInEvent>();
+
+  Stream<SignInEvent> get signInEventStream => _onSignInEventSubject.stream;
 
   // Collection Name
   final _onUsernameValueChangedSubject = BehaviorSubject<String>();
@@ -108,16 +119,23 @@ class SignInBloc with SubscriptionHolder {
   Sink<void> get onSignInSink => _onSignInSubject.sink;
 
   // Sign in
-  Stream<void> _signIn() async* {
+  Stream<SignInState> _signIn() async* {
+    yield Loading();
+
     try {
-      final token = await _signInUC.getFuture(
+      await _signInUC.getFuture(
         SignInUCParams(usernameValue, passwordValue),
       );
+
+      _onSignInEventSubject.add(
+        NavigateToHomePageEvent(),
+      );
+
       // do something
     } catch (error) {
       // do something
     } finally {
-      // do something
+      yield Idle();
     }
   }
 

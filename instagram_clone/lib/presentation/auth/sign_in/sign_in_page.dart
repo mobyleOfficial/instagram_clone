@@ -4,10 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/generated/l10n.dart';
 import 'package:instagram_clone/presentation/auth/sign_in/sign_in_bloc.dart';
+import 'package:instagram_clone/presentation/auth/sign_in/sign_in_model.dart';
 import 'package:instagram_clone/presentation/common/custom_single_child_scroll_view.dart';
 import 'package:instagram_clone/presentation/common/edit_text.dart';
+import 'package:instagram_clone/presentation/common/event_handler.dart';
 import 'package:instagram_clone/presentation/common/instagram_clone_button.dart';
 import 'package:instagram_clone/presentation/common/instagram_clone_colors.dart';
+import 'package:instagram_clone/presentation/common/progress_indicator.dart';
 import 'package:instagram_clone/presentation/common/span.dart';
 import 'package:instagram_clone/presentation/common/spannable_text.dart';
 import 'package:instagram_clone/presentation/common/view_utils.dart';
@@ -34,21 +37,38 @@ class SignInPage extends StatelessWidget {
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
           body: CustomSingleChildScrollView(
-            SafeArea(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  _ChoseLanguageDropdown(),
-                  Flexible(
-                    child: _SignInBody(
-                      bloc,
-                    ),
-                  ),
-                  _SignInFooter(),
-                ],
+            EventHandler<SignInEvent>(
+              bloc.signInEventStream,
+              (event) {
+                // Navigate to the next screen
+              },
+              child: SafeArea(
+                child: StreamBuilder<SignInState>(
+                  stream: bloc.signInStateStream,
+                  builder: (context, snapshot) {
+                    if (snapshot.data is Idle) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          _ChoseLanguageDropdown(),
+                          Flexible(
+                            child: _SignInBody(
+                              bloc,
+                            ),
+                          ),
+                          _SignInFooter(),
+                        ],
+                      );
+                    } else if (snapshot.data is Loading) {
+                      return InstagramCloneProgressIndicator();
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
               ),
             ),
           ),
@@ -56,6 +76,7 @@ class SignInPage extends StatelessWidget {
       );
 }
 
+// todo: This dropdown will be built another time
 class _ChoseLanguageDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) => const Text(
