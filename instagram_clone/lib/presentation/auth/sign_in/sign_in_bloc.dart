@@ -147,4 +147,16 @@ class SignInBloc with SubscriptionHolder {
             ValidateEmptyTextUCParams(text),
           )
           .addStatusToSink(sink);
+
+  void dispose() {
+    // Sign in State
+    _onSignInStateSubject.close();
+    _onSignInEventSubject.close();
+    _onSignInSubject.close();
+    _onPasswordFocusLostSubject.close();
+    _onPasswordValueChangedSubject.close();
+    _onUsernameFocusLostSubject.close();
+    _onUsernameValueChangedSubject.close();
+    _onUpdateButtonStateSubject.close();
+  }
 }

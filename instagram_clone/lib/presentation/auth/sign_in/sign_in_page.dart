@@ -25,6 +25,7 @@ class SignInPage extends StatelessWidget {
       ProxyProvider2<ValidateEmptyTextUC, SignInUC, SignInBloc>(
         update: (_, validateEmptyTextUC, signInUC, bloc) =>
             bloc ?? SignInBloc(validateEmptyTextUC, signInUC),
+        dispose: (_, bloc) => bloc.dispose,
         child: Consumer<SignInBloc>(
           builder: (_, bloc, __) => SignInPage(bloc),
         ),
@@ -41,6 +42,9 @@ class SignInPage extends StatelessWidget {
               bloc.signInEventStream,
               (event) {
                 // Navigate to the next screen
+                if (event is NavigateToHomePageEvent) {
+                  Navigator.of(context).pushReplacementNamed('/');
+                }
               },
               child: SafeArea(
                 child: StreamBuilder<SignInState>(
@@ -227,6 +231,15 @@ class _SignInBodyState extends State<_SignInBody> {
           ],
         ),
       );
+
+  @override
+  void dispose() {
+    _usernameTextController.dispose();
+    _passwordTextController.dispose();
+    _usernameFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    super.dispose();
+  }
 }
 
 class _SignInFooter extends StatelessWidget {
