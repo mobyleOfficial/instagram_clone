@@ -172,7 +172,8 @@ class _SignInBodyState extends State<_SignInBody> {
                   color: InstagramCloneColors.darkGray,
                 ),
                 const TextStyle(
-                  color: InstagramCloneColors.darkBlue,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -248,7 +249,8 @@ class _SignInFooter extends StatelessWidget {
                   fontSize: 15,
                 ),
                 const TextStyle(
-                  color: InstagramCloneColors.darkBlue,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
                   fontSize: 15,
                 ),
               ),

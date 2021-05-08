@@ -25,8 +25,6 @@ class SignInBloc with SubscriptionHolder {
         )
         .addTo(subscriptions);
 
-    MergeStream([]);
-
     _onSignInSubject
         .flatMap(
           (_) => Future.wait(
@@ -53,11 +51,7 @@ class SignInBloc with SubscriptionHolder {
       _passwordInputStatusSubject.map(
         (status) => status == InputStatusVM.valid,
       ),
-      (
-        isSecondNameValid,
-        isNameValid,
-      ) =>
-          isNameValid && isSecondNameValid,
+      (isSecondNameValid, isNameValid) => isNameValid && isSecondNameValid
     )
         .listen(
           _onUpdateButtonStateSubject.add,
